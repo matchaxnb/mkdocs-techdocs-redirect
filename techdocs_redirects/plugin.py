@@ -2,7 +2,6 @@
 Copyright 2019-2022 DataRobot, Inc. and its affiliates.
 All rights reserved.
 """
-import os
 import json
 
 from mkdocs.config import config_options
