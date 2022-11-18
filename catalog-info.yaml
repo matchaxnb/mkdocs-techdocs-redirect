@@ -6,11 +6,9 @@ metadata:
   name: mkdocs-techdocs-redirects
   description: A library to redirect pages in TechDocs
   tags:
-    - inner-source
-    - internal-tool
-    - node
-    - react
-    - yarn
+    - python
+    - techdocs
+    - mkdocs-plugin
   links:
     - url: https://github.com/matchaxnb/mkdocs-techdocs-redirect
       title: GitHub project
