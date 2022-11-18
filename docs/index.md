@@ -105,6 +105,8 @@ and change the last lines of it to
 This creates a very simple wrapper that does the redirection work for the TechDocs entities. It is non-intrusive
 and will work nicely even if you do not use redirections yet.
 
+Find the most up-to-date example [in the /backstage folder](/backstage/packages_backend_src_plugins/techdocs.ts).
+
 ## An operational example
 
 Click [this link](redirection_example) (if you've imported this page in a Backstage instance with the extension setup). It will take you back to the right page.
