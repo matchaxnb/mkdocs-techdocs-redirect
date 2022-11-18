@@ -40,6 +40,7 @@ setup(
     ],
     extras_require={
         'dev': test_requirements + release_requirements,
+        'test': test_requirements,
         'release': release_requirements,
     },
     classifiers=[
