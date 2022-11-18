@@ -15,8 +15,8 @@ Imaging your "Tutorial" page becomes too big and you want to split it in 2 parts
 
 You will take the large file `tutorial.md` and split it to 2 files:
 
-- `tutorial/01-getting-started.md`
-- `tutorial/02-going-further.md`
+- `tutorial-guide/01-getting-started.md`
+- `tutorial-guide/02-going-further.md`
 
 But now, if you just do that, when people will access your old `tutorial` link, they will get a 404. You actually want them to end up on
 the `tutorial/01-getting-started` page.
@@ -29,84 +29,77 @@ plugins:
   - techdocs-core
   - redirects:
       redirect_maps:
-        "tutorial": "tutorial/01-getting-started"
+        "tutorial": "tutorial-guide/01-getting-started"
 # [ ... ]
 ```
 
 ## Supporting this on the Backstage side
 
-Change your `packages/backend/src/plugins/techdocs.ts` so that it reads like this:
+> **Note**: in the past we recommended using a backend mod to plugins/techdocs.ts. It is flaky and would not work so well. Don't.
 
-```typescript
+Create a `packages/app/src/plugins/techdocsRedirect.tsx` module with this contents:
 
-// this type extends TechDocsMetadata to add a redirects key-value map of redirections
+```tsx
+import { createPlugin } from "@backstage/core-plugin-api";
+import { createTechDocsAddonExtension, TechDocsAddonLocations, TechDocsMetadata, useTechDocsReaderPage } from "@backstage/plugin-techdocs-react";
+import React from "react";
+import { useParams } from "react-router";
+import { AsyncState } from "react-use/lib/useAsyncFn";
+import { Navigate } from 'react-router-dom'
+const techdocsRedirectPlugin = createPlugin({
+    id: 'techdocsRedirect'
+})
+
 type TechDocsMetadataExt = TechDocsMetadata & {
   redirects?: { [key: string]: string };
-};
+ }
 
-// this function creates a wrapping router for TechDocs
-async function createRouterRedirects(options: RouterOptions): Promise<Router> {
-  const router = Router();
-  const { logger } = options;
-  const publisher = options.publisher;
-  // add middleware to handle redirects by processing an extra field of techdocs metadata
-
-  router.use('/static/docs/:namespace/:kind/:name', async (req, _res, next) => {
-    const { kind, namespace, name } = req.params;
-    const entityName = { kind, namespace, name };
-    try {
-      const metadata = (await publisher.fetchTechDocsMetadata(
-        entityName,
-      )) as TechDocsMetadataExt;
-      const redirects = metadata.redirects ?? {};
-      for (const key in redirects) {
-        const fullFormedSrc = `/${key}/index.html`;
-        const fullFormedDst = `/${redirects[key]}/index.html`;
-        if (req.url == fullFormedSrc) {
-          req.url = fullFormedDst;
-          logger.debug(`redirection found from ${key} to ${fullFormedDst}`);
-          break;
-        }
-      }
-    } catch (err) {
-      logger.info(
-        `Unable to get metadata for '${stringifyEntityRef(
-          entityName,
-        )}' with error ${err}`,
-      );
+const TechDocsRedirector = () => {
+    const { metadata  } = useTechDocsReaderPage() 
+    const params = useParams()
+    const path = params['*'] ?? "";
+    const redirects = (metadata as AsyncState<TechDocsMetadataExt>).value?.redirects??{};
+    const target = redirects[path] ?? path;
+    if (target == path) {
+        return (<></>)
     }
-    next();
-  });
-  const sourceRouter = await createRouter(options);
-  // delegate most of the work to the base sourceRouter
-  router.use('', sourceRouter);
-  return router;
+    return (
+    <Navigate to={target} />
+    )
 }
+
+export const TechDocsRedirectExtension = techdocsRedirectPlugin.provide(
+    createTechDocsAddonExtension({
+        name: 'TechDocsRedirectExtension',
+        location: TechDocsAddonLocations.Header,
+        component: TechDocsRedirector,
+    })
+)
 ```
 
-and change the last lines of it to
+Then, add it as a dependency to your `App.tsx` and summon it in the TechDocsAddons
 
-```typescript
-  // checks if the publisher is working and logs the result
-  await publisher.getReadiness();
-  // calling our createRouter wrapper
-  return await createRouterRedirects({
-    preparers,
-    generators,
-    publisher,
-    logger: env.logger,
-    config: env.config,
-    discovery: env.discovery,
-    cache: env.cache,
-  });
-}
+```tsx
+// redirect extension for techdocs
+import { TechDocsRedirectExtension } from './custom/techdocsRedirect';
+
+// [...]
+const routes = ( 
+// [...]
+        <TechDocsAddons>
+            <ReportIssue />
+            <TechDocsRedirectExtension />
+        </TechDocsAddons>
 ```
 
-This creates a very simple wrapper that does the redirection work for the TechDocs entities. It is non-intrusive
-and will work nicely even if you do not use redirections yet.
-
-Find the most up-to-date example [in the /backstage folder](/backstage/packages_backend_src_plugins/techdocs.ts).
+Find the most up-to-date example [in the /backstage folder](/backstage/packages_app_src_plugins/techdocsRedirect.tsx).
 
 ## An operational example
 
 Click [this link](redirection_example) (if you've imported this page in a Backstage instance with the extension setup). It will take you back to the right page.
+
+## Limitations
+
+Currently you cannot redirect a page to a subfolder with the same stub name.
+
+For example, you cannot redirect `tutorial` to `tutorial/01-getting-started`. That's why we use `tutorial-guide/01-getting-started`

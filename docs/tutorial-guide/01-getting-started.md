@@ -1,4 +1,6 @@
-# This life is nothing short of an unveiling evolution of holistic nature.
+# Getting started
+
+## This life is nothing short of an unveiling evolution of holistic nature.
 
 _Non-locality requires exploration. Nothing is impossible._
 

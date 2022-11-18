@@ -1,3 +1,4 @@
+// NOTE: this is deprecated. I don't think it will work well.
 import { DockerContainerRunner } from '@backstage/backend-common';
 import { stringifyEntityRef } from '@backstage/catalog-model';
 import {

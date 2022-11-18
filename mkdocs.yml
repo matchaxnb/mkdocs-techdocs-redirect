@@ -1,11 +1,10 @@
 site_name: mkdocs-techdocs-redirects
-description: A TechDocs website for mkdocs-techdocs-redirects
+site_description: A TechDocs website for mkdocs-techdocs-redirects
 docs_dir: docs
 repo_url: https://github.com/matchaxnb/mkdocs-techdocs-redirect/
 plugins:
   - techdocs-core
   - redirects:
       redirect_maps:
-        tutorial: tutorial/01-getting-started
-        redirection_example: index
-
+        tutorial: tutorial-guide/01-getting-started
+        redirection_example: ""
