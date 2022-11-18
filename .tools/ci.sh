@@ -10,7 +10,7 @@ with_groups() {
 
 srcs='techdocs_redirects setup.py'
 
-"$@" pytest -q
+# "$@" pytest -q
 "$@" autoflake -i -r --remove-all-unused-imports --remove-unused-variables $srcs
 "$@" isort -q $srcs
 "$@" black -l100 -tpy36 --skip-string-normalization -q $srcs
