@@ -25,7 +25,7 @@ release_requirements = [
 
 setup(
     name='mkdocs-techdocs-redirects',
-    version='0.1',
+    version='0.1.2',
     description='A MkDocs plugin to redirect old links to new addresses for TechDocs.',
     long_description=read('README.md'),
     long_description_content_type="text/markdown",

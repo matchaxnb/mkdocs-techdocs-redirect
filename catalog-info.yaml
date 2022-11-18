@@ -1,0 +1,27 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  namespace: matchaxnb
+  name: mkdocs-techdocs-redirects
+  description: A library to redirect pages in TechDocs
+  tags:
+    - inner-source
+    - internal-tool
+    - node
+    - react
+    - yarn
+  links:
+    - url: https://github.com/matchaxnb/mkdocs-techdocs-redirect
+      title: GitHub project
+      icon: rocket-launch
+    - url: https://pypi.org/project/mkdocs-techdocs-redirects/
+      title: PyPi project page
+      icon: rocket-launch
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: 'matchaxnb/mkdocs-techdocs-redirects'
+spec:
+  type: library
+  owner: user:github.com/matchaxnb
+  lifecycle: production

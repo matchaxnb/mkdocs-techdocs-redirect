@@ -2,7 +2,7 @@
 
 Plugin to handle redirections for techdocs sites.
 
-Uses the same config and is inspired by and initially forked from [mkdocs-redirects](https://github.com/mkdocs/mkdocs-redirects).
+Uses (almost) the same config and is inspired by and initially forked from [mkdocs-redirects](https://github.com/mkdocs/mkdocs-redirects).
 
 ## Installing
 
@@ -11,7 +11,7 @@ Uses the same config and is inspired by and initially forked from [mkdocs-redire
 Install with pip:
 
 ```bash
-pip install mkdocs-redirects
+pip install mkdocs-techdocs-redirects
 ```
 
 ## Using
@@ -33,3 +33,6 @@ Opposite to what mkdocs-redirects does, do not specify `.md` or `.html`. We are 
 
 - Please propose tests.
 
+## More docs? How to setup on backstage?
+
+[Read the TechDocs](docs/index.md)
