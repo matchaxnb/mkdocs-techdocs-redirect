@@ -31,4 +31,4 @@ class RedirectPlugin(BasePlugin):
 
     # Create TechDocs metadata in the metadata file
     def on_post_build(self, config, **kwargs):
-        create_or_update_techdocs_metadata(config["site_dir"], {"redirects": self.redirects})
+        create_or_update_techdocs_metadata(config["site_dir"], {"redirects": self.config.get('redirect_maps', {})})
